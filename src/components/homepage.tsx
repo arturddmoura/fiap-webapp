@@ -6,9 +6,20 @@ import Cards from './cards'
 interface HomeProps {
   cartNumber: number
   setCartNumber: React.Dispatch<React.SetStateAction<number>>
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setMessage: React.Dispatch<React.SetStateAction<string>>
+  setSeverity: React.Dispatch<
+    React.SetStateAction<'success' | 'error' | 'info' | 'warning' | undefined>
+  >
 }
 
-export default function HomePage({ cartNumber, setCartNumber }: HomeProps) {
+export default function HomePage({
+  cartNumber,
+  setCartNumber,
+  setOpen,
+  setMessage,
+  setSeverity,
+}: HomeProps) {
   return (
     <>
       <Stack
@@ -21,6 +32,9 @@ export default function HomePage({ cartNumber, setCartNumber }: HomeProps) {
       >
         {products.map((product, index) => (
           <Cards
+            setOpen={setOpen}
+            setMessage={setMessage}
+            setSeverity={setSeverity}
             key={index}
             product={product}
             cartNumber={cartNumber}

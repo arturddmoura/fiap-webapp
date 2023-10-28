@@ -1,3 +1,4 @@
+import ClearIcon from '@mui/icons-material/Clear'
 import {
   Box,
   Button,
@@ -7,15 +8,38 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import React from 'react'
 import { cartItems } from '../produts'
 import { numberFormat } from './helpers'
-import ClearIcon from '@mui/icons-material/Clear'
 
-export default function Cart() {
+interface CartProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setMessage: React.Dispatch<React.SetStateAction<string>>
+  setSeverity: React.Dispatch<
+    React.SetStateAction<'success' | 'error' | 'info' | 'warning' | undefined>
+  >
+}
+
+export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
+  const [disableButton, setDisableButton] = React.useState(false)
+
   let totalPrice = 0
 
   for (const item of cartItems) {
     totalPrice += item.price * item.quantity
+  }
+
+  const handleCheckout = () => {
+    setDisableButton(true)
+    setOpen(true)
+    setSeverity('success')
+    setMessage('Pedido realizado com sucesso')
+  }
+
+  const handleDelete = () => {
+    setOpen(true)
+    setSeverity('error')
+    setMessage('Produto removido com sucesso')
   }
 
   return (
@@ -45,6 +69,7 @@ export default function Cart() {
                 <Typography variant="body1" component="h2">
                   {item.name}
                   <IconButton
+                    onClick={handleDelete}
                     sx={{ mb: 0.4, ml: 1 }}
                     aria-label="delete"
                     size="small"
@@ -66,7 +91,13 @@ export default function Cart() {
       <Typography variant="body1" component="h2">
         Total: {numberFormat(totalPrice)}
       </Typography>
-      <Button sx={{ mt: 2 }} variant="contained" fullWidth>
+      <Button
+        disabled={disableButton}
+        onClick={handleCheckout}
+        sx={{ mt: 2 }}
+        variant="contained"
+        fullWidth
+      >
         Finalizar compra
       </Button>
     </Paper>
