@@ -2,8 +2,10 @@
 
 Como testar:
 
+```
 pnpm install
 pnpm run dev
+```
 
 # React + TypeScript + Vite
 
