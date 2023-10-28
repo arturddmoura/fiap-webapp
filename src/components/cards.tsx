@@ -12,8 +12,19 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import React from 'react'
+import { numberFormat } from './helpers'
 
-export default function Cards({ product }: { product: any }) {
+interface CardsProps {
+  product: any
+  cartNumber: number
+  setCartNumber: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function Cards({
+  product,
+  cartNumber,
+  setCartNumber,
+}: CardsProps) {
   //const productId = product.id
   const availableQuantity = product.available_quantity
 
@@ -31,8 +42,12 @@ export default function Cards({ product }: { product: any }) {
     }
   }
 
+  const handleAddToCart = () => {
+    setCartNumber(cartNumber + quantity)
+  }
+
   return (
-    <Box sx={{ p: 5 }}>
+    <Box sx={{ pl: 5, pr: 5, pb: 5 }}>
       <Card sx={{ maxWidth: 345 }}>
         <CardActionArea>
           <CardMedia
@@ -48,6 +63,13 @@ export default function Cards({ product }: { product: any }) {
             <Typography variant="body2" color="text.secondary">
               {product.description}
             </Typography>
+            <Typography
+              sx={{ mt: 2, mb: -2 }}
+              variant="body2"
+              color="text.secondary"
+            >
+              Preço: {numberFormat(product.price ?? 0)}
+            </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
@@ -60,7 +82,12 @@ export default function Cards({ product }: { product: any }) {
               <AddCircleIcon />
             </IconButton>
           </Box>
-          <Button sx={{ ml: 'auto' }} size="small" color="primary">
+          <Button
+            onClick={handleAddToCart}
+            sx={{ ml: 'auto' }}
+            size="small"
+            color="primary"
+          >
             Adicionar ao carrinho
           </Button>
         </CardActions>

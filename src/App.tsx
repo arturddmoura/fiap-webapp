@@ -1,28 +1,37 @@
-import { Box, Stack } from '@mui/material'
-import Cards from './components/cards'
-import NavBar from './components/navbar'
+import { Box } from '@mui/material'
 import React from 'react'
-import { products } from './produts'
+import HomePage from './components/homepage'
+import NavBar from './components/navbar'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import Cart from './components/cart'
 
 function App() {
   //const [openCart, setOpenCart] = React.useState(false)
+  const [cartNumber, setCartNumber] = React.useState(0)
 
   return (
     <Box sx={{ minHeight: '100vh', width: '100%' }}>
-      <NavBar />
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Stack
-          direction="row"
-          useFlexGap
-          flexWrap="wrap"
-          sx={{ width: '100%' }}
-          justifyContent="center"
-          alignItems="center"
-        >
-          {products.map((product, index) => (
-            <Cards key={index} product={product} />
-          ))}
-        </Stack>
+      <NavBar cartNumber={cartNumber} />
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ pt: 5 }}
+      >
+        <Router>
+          <Routes>
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  cartNumber={cartNumber}
+                  setCartNumber={setCartNumber}
+                />
+              }
+            />
+          </Routes>
+        </Router>
       </Box>
     </Box>
   )
