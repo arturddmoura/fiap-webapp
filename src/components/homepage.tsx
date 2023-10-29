@@ -1,11 +1,11 @@
 import { Stack } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { products } from '../produts'
+import { ProductItem, getProducts } from '../services/products'
 import Cards from './cards'
 
 interface HomeProps {
   cartNumber: number
-  setCartNumber: React.Dispatch<React.SetStateAction<number>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
   setSeverity: React.Dispatch<
@@ -14,12 +14,15 @@ interface HomeProps {
 }
 
 export default function HomePage({
-  cartNumber,
-  setCartNumber,
   setOpen,
   setMessage,
   setSeverity,
 }: HomeProps) {
+  const { data } = useQuery({
+    queryKey: ['products'],
+    queryFn: getProducts,
+  })
+
   return (
     <>
       <Stack
@@ -30,17 +33,16 @@ export default function HomePage({
         justifyContent="center"
         alignItems="center"
       >
-        {products.map((product, index) => (
-          <Cards
-            setOpen={setOpen}
-            setMessage={setMessage}
-            setSeverity={setSeverity}
-            key={index}
-            product={product}
-            cartNumber={cartNumber}
-            setCartNumber={setCartNumber}
-          />
-        ))}
+        {data &&
+          data.map((product: ProductItem, index: number) => (
+            <Cards
+              setOpen={setOpen}
+              setMessage={setMessage}
+              setSeverity={setSeverity}
+              key={index}
+              product={product}
+            />
+          ))}
       </Stack>
     </>
   )

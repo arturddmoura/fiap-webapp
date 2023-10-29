@@ -7,11 +7,11 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 import { numberFormat } from './helpers'
+import { CartItem, addToCart } from '../services/cart'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 interface CardsProps {
   product: any
-  cartNumber: number
-  setCartNumber: React.Dispatch<React.SetStateAction<number>>
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
   setSeverity: React.Dispatch<
@@ -21,13 +21,40 @@ interface CardsProps {
 
 export default function Cards({
   product,
-  cartNumber,
-  setCartNumber,
   setOpen,
   setMessage,
   setSeverity,
 }: CardsProps) {
-  //const productId = product.id
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation({
+    mutationFn: (formData: CartItem) => {
+      formData.product_id = formData.id
+      formData.quantity = quantity
+      formData.id = Math.floor(Math.random() * 100000000000) + 1
+      return addToCart(formData)
+    },
+    onSuccess: async (data: { status: number }) => {
+      if (data.status == 201) {
+        setDisableButton(true)
+        setOpen(true)
+        setSeverity('success')
+        setMessage('Produto adicionado ao carrinho')
+        queryClient.invalidateQueries({ queryKey: ['cart'] })
+        queryClient.invalidateQueries({ queryKey: ['cartNumber'] })
+      } else {
+        setOpen(true)
+        setSeverity('error')
+        setMessage('Erro ao adicionar item ao carrinho')
+      }
+    },
+    onError: async () => {
+      setOpen(true)
+      setSeverity('error')
+      setMessage('Erro ao adicionar item ao carrinho')
+    },
+  })
+
   const [disableButton, setDisableButton] = React.useState(false)
 
   const availableQuantity = product.available_quantity
@@ -50,12 +77,7 @@ export default function Cards({
     if (quantity === 0) {
       return
     }
-
-    setCartNumber(cartNumber + quantity)
-    setDisableButton(true)
-    setOpen(true)
-    setSeverity('success')
-    setMessage('Produto adicionado ao carrinho')
+    mutate(product)
   }
 
   return (
@@ -63,7 +85,7 @@ export default function Cards({
       <Card sx={{ maxWidth: 345 }}>
         <CardMedia
           component="img"
-          height="140"
+          height="300"
           image={product.picture}
           alt="green iguana"
         />

@@ -1,0 +1,77 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "price": 5.99,
+      "available_quantity": 10,
+      "name": "Laranja",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/203825-1000-1000/1375_1.png?v=638100350145870000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 2,
+      "price": 12.9,
+      "available_quantity": 5,
+      "name": "Maçã Gala",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/208033-1000-1000/6016_1.png?v=638100780222600000",
+      "description": "Preço por aquilo"
+    },
+    {
+      "id": 3,
+      "price": 6.99,
+      "available_quantity": 4,
+      "name": "Abacaxi",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/203390-1000-1000/11_1.png?v=638100344252870000",
+      "description": "Preço por unidade"
+    },
+    {
+      "id": 4,
+      "price": 4.49,
+      "available_quantity": 6,
+      "name": "Melancia",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/217203-1000-1000/1389_1.png?v=638100913997100000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 5,
+      "price": 12,
+      "available_quantity": 5,
+      "name": "Banana Prata",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/203812-1000-1000/1355_1.png?v=638100350061130000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 5,
+      "price": 8.99,
+      "available_quantity": 5,
+      "name": "Uva Preta",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/219154-1000-1000/190849_1.png?v=638100929976370000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 6,
+      "price": 13.99,
+      "available_quantity": 5,
+      "name": "Uva Thompson",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/247833-1000-1000/190845_99.png?v=638199524146230000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 8,
+      "price": 11.99,
+      "available_quantity": 5,
+      "name": "Mexerica",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/247839-1000-1000/2785_99.png?v=638199524152470000",
+      "description": "Preço por quilo"
+    },
+    {
+      "id": 9,
+      "price": 9.99,
+      "available_quantity": 5,
+      "name": "Limao Taiti",
+      "picture": "https://tezegw.vteximg.com.br/arquivos/ids/203823-1000-1000/1377_1.png?v=638100350130070000",
+      "description": "Preço por quilo"
+    }
+  ],
+  "cart": []
+}

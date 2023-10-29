@@ -4,10 +4,23 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import Cart from './components/cart'
 import HomePage from './components/homepage'
 import NavBar from './components/navbar'
+import { useQuery } from '@tanstack/react-query'
+import { getCart } from './services/cart'
 
 function App() {
   //const [openCart, setOpenCart] = React.useState(false)
-  const [cartNumber, setCartNumber] = React.useState(0)
+  const { data } = useQuery({
+    queryKey: ['cartNumber'],
+    queryFn: getCart,
+  })
+
+  let cartNumber: number = 0
+  if (data) {
+    for (const item of data) {
+      cartNumber += item.quantity
+    }
+  }
+
   const [open, setOpen] = React.useState(false)
   const [message, setMessage] = React.useState('Sample message')
   const [severity, setSeverity] = React.useState<
@@ -57,7 +70,6 @@ function App() {
                   setMessage={setMessage}
                   setSeverity={setSeverity}
                   cartNumber={cartNumber}
-                  setCartNumber={setCartNumber}
                 />
               }
             />
