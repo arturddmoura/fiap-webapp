@@ -1,22 +1,22 @@
 import ClearIcon from '@mui/icons-material/Clear'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
-  Button,
   Divider,
   IconButton,
   Paper,
   Stack,
   Typography,
 } from '@mui/material'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
-import { numberFormat } from './helpers'
 import {
   CartItem,
   deleteAllFromCart,
   deleteFromCart,
   getCart,
 } from '../services/cart'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { numberFormat } from './helpers'
 
 interface CartProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,6 +27,8 @@ interface CartProps {
 }
 
 export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
+  const [loading, setLoading] = React.useState(false)
+
   const queryClient = useQueryClient()
   const { data } = useQuery({
     queryKey: ['cart'],
@@ -59,6 +61,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
 
   const { mutate: checkout }: any = useMutation({
     mutationFn: () => {
+      setLoading(true)
       const itemIds: Array<number> = data.map((item: CartItem) => item.id)
       return deleteAllFromCart(itemIds)
     },
@@ -70,6 +73,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
         setMessage('Pedido realizado com sucesso')
         queryClient.invalidateQueries({ queryKey: ['cart'] })
         queryClient.invalidateQueries({ queryKey: ['cartNumber'] })
+        setLoading(false)
       } else {
         setOpen(true)
         setSeverity('error')
@@ -80,6 +84,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
       setOpen(true)
       setSeverity('error')
       setMessage('Falha ao realizar pedido')
+      setLoading(false)
     },
   })
 
@@ -96,6 +101,13 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
   let totalPrice = 0
 
   if (data) {
+    if (data.length === 0) {
+      return (
+        <Typography variant="h4" component="h2" sx={{ pb: 5 }}>
+          Seu carrinho está vazio
+        </Typography>
+      )
+    }
     for (const item of data) {
       totalPrice += item.price * item.quantity
     }
@@ -152,7 +164,8 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
       <Typography variant="body1" component="h2">
         Total: {numberFormat(totalPrice)}
       </Typography>
-      <Button
+      <LoadingButton
+        loading={loading}
         disabled={disableButton || (data && data.length === 0)}
         onClick={handleCheckout}
         sx={{ mt: 2 }}
@@ -160,7 +173,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
         fullWidth
       >
         Finalizar compra
-      </Button>
+      </LoadingButton>
     </Paper>
   )
 }

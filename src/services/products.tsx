@@ -8,6 +8,6 @@ export interface ProductItem {
 }
 
 export const getProducts = async () => {
-  const res = await fetch(`http://localhost:3000/products`)
+  const res = await fetch(`https://mock-api-c1ch.onrender.com/products/`)
   return res.json()
 }

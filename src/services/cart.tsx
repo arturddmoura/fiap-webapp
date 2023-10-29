@@ -10,7 +10,7 @@ export interface CartItem {
 }
 
 export const getCart = async () => {
-  const res = await fetch(`http://localhost:3000/cart`)
+  const res = await fetch(`https://mock-api-c1ch.onrender.com/cart/`)
   return res.json()
 }
 
@@ -20,7 +20,7 @@ export const addToCart = (formData: CartItem) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData),
   }
-  return fetch(`http://localhost:3000/cart/`, requestOptions)
+  return fetch(`https://mock-api-c1ch.onrender.com/cart/`, requestOptions)
 }
 
 export const deleteFromCart = (itemId: number) => {
@@ -28,7 +28,10 @@ export const deleteFromCart = (itemId: number) => {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   }
-  return fetch(`http://localhost:3000/cart/${itemId}`, requestOptions)
+  return fetch(
+    `https://mock-api-c1ch.onrender.com/cart/${itemId}`,
+    requestOptions
+  )
 }
 
 export const deleteAllFromCart = async (
@@ -43,7 +46,7 @@ export const deleteAllFromCart = async (
 
   for (const id of itemIds) {
     const response = await fetch(
-      `http://localhost:3000/cart/${id}`,
+      `https://mock-api-c1ch.onrender.com/cart/${id}`,
       requestOptions
     )
 

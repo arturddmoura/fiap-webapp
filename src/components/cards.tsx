@@ -1,6 +1,8 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
-import { Box, Button, CardActions, IconButton } from '@mui/material'
+import { Box, CardActions, IconButton } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
+
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -25,10 +27,13 @@ export default function Cards({
   setMessage,
   setSeverity,
 }: CardsProps) {
+  const [loading, setLoading] = React.useState(false)
+
   const queryClient = useQueryClient()
 
   const { mutate } = useMutation({
     mutationFn: (formData: CartItem) => {
+      setLoading(true)
       formData.product_id = formData.id
       formData.quantity = quantity
       formData.id = Math.floor(Math.random() * 100000000000) + 1
@@ -42,16 +47,19 @@ export default function Cards({
         setMessage('Produto adicionado ao carrinho')
         queryClient.invalidateQueries({ queryKey: ['cart'] })
         queryClient.invalidateQueries({ queryKey: ['cartNumber'] })
+        setLoading(false)
       } else {
         setOpen(true)
         setSeverity('error')
         setMessage('Erro ao adicionar item ao carrinho')
+        setLoading(false)
       }
     },
     onError: async () => {
       setOpen(true)
       setSeverity('error')
       setMessage('Erro ao adicionar item ao carrinho')
+      setLoading(false)
     },
   })
 
@@ -122,7 +130,8 @@ export default function Cards({
               <AddCircleIcon />
             </IconButton>
           </Box>
-          <Button
+          <LoadingButton
+            loading={loading}
             disabled={quantity === 0 || disableButton}
             onClick={handleAddToCart}
             sx={{ ml: 'auto' }}
@@ -130,7 +139,7 @@ export default function Cards({
             color="primary"
           >
             Adicionar ao carrinho
-          </Button>
+          </LoadingButton>
         </CardActions>
       </Card>
     </Box>
