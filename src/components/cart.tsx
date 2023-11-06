@@ -30,17 +30,19 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
   const [loading, setLoading] = React.useState(false)
 
   const queryClient = useQueryClient()
-  const { data } = useQuery({
+  const { data: dbdata } = useQuery({
     queryKey: ['cart'],
     queryFn: getCart,
   })
+
+  const data = dbdata?.result ?? []
 
   const { mutate } = useMutation({
     mutationFn: (id: number) => {
       return deleteFromCart(id)
     },
     onSuccess: async (data: { status: number }) => {
-      if (data.status == 200) {
+      if (data.status == 204) {
         setOpen(true)
         setSeverity('error')
         setMessage('Produto removido com sucesso')
@@ -66,7 +68,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
       return deleteAllFromCart(itemIds)
     },
     onSuccess: async (data: { status: number }) => {
-      if (data.status == 200) {
+      if (data.status == 204) {
         setDisableButton(true)
         setOpen(true)
         setSeverity('success')
@@ -109,7 +111,8 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
       )
     }
     for (const item of data) {
-      totalPrice += item.price * item.quantity
+      console.log(item)
+      totalPrice += item.product.price * item.quantity
     }
   }
 
@@ -133,16 +136,16 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
                   maxHeight: { xs: 233, md: 167 },
                   maxWidth: { xs: 350, md: 250 },
                 }}
-                alt={item.name}
-                src={item.picture}
+                alt={item.product.name}
+                src={item.product.picture}
               />
 
               <Stack spacing={2}>
                 <Box sx={{ py: 3 }}>
                   <Typography variant="body1" component="h2">
-                    {item.name}
+                    {item.product.name}
                     <IconButton
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => handleDelete(item.id ?? 0)}
                       sx={{ mb: 0.4, ml: 1 }}
                       aria-label="delete"
                       size="small"
@@ -151,7 +154,7 @@ export default function Cart({ setOpen, setMessage, setSeverity }: CartProps) {
                     </IconButton>
                   </Typography>
                   <Typography variant="body1" component="h2">
-                    {`${numberFormat(item.quantity * item.price)} (${
+                    {`${numberFormat(item.quantity * item.product.price)} (${
                       item.quantity
                     } unidades)`}
                   </Typography>

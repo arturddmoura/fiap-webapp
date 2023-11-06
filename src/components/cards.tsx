@@ -9,8 +9,9 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 import { numberFormat } from './helpers'
-import { CartItem, addToCart } from '../services/cart'
+import { addToCart } from '../services/cart'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ProductItem } from '../services/products'
 
 interface CardsProps {
   product: any
@@ -32,12 +33,13 @@ export default function Cards({
   const queryClient = useQueryClient()
 
   const { mutate } = useMutation({
-    mutationFn: (formData: CartItem) => {
+    mutationFn: (product: ProductItem) => {
       setLoading(true)
-      formData.product_id = formData.id
-      formData.quantity = quantity
-      formData.id = Math.floor(Math.random() * 100000000000) + 1
-      return addToCart(formData)
+      const payload = {
+        productId: product.productId,
+        quantity: quantity,
+      }
+      return addToCart(payload)
     },
     onSuccess: async (data: { status: number }) => {
       if (data.status == 201) {
@@ -65,7 +67,7 @@ export default function Cards({
 
   const [disableButton, setDisableButton] = React.useState(false)
 
-  const availableQuantity = product.available_quantity
+  const availableQuantity = product.availableQuantity
 
   const [quantity, setQuantity] = React.useState(0)
 
@@ -85,6 +87,7 @@ export default function Cards({
     if (quantity === 0) {
       return
     }
+    console.log(product)
     mutate(product)
   }
 

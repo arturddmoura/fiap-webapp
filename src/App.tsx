@@ -9,10 +9,12 @@ import { getCart } from './services/cart'
 
 function App() {
   //const [openCart, setOpenCart] = React.useState(false)
-  const { data } = useQuery({
+  const { data: dbdata } = useQuery({
     queryKey: ['cartNumber'],
     queryFn: getCart,
   })
+
+  const data = dbdata?.result ?? []
 
   let cartNumber: number = 0
   if (data) {
