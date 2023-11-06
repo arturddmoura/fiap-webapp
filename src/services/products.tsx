@@ -8,6 +8,6 @@ export interface ProductItem {
 }
 
 export const getProducts = async () => {
-  const res = await fetch(`http://fiap-api.onrender.com/api/Product/`)
+  const res = await fetch(`https://fiap-api.onrender.com/api/Product/`)
   return res.json()
 }
